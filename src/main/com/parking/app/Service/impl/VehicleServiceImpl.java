@@ -86,7 +86,7 @@ public class VehicleServiceImpl implements VehicleService {
         return tokenRepository
                 .findByTokenNumber(tokenNumber)
                 .orElseThrow(() ->
-                        new RuntimeException("Token not found"));
+                        new ResourceNotFoundException("Parking Token not found"));
     }
 
     private Double calculateAmount(

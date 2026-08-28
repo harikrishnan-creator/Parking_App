@@ -35,6 +35,13 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public ParkingToken vehicleEntry(String vehicleNumber) {
 
+        if(vehicleNumber == null ||
+       vehicleNumber.isBlank()) {
+
+        throw new ValidationException(
+                "Vehicle number is mandatory");
+    }
+
         ParkingToken token = ParkingToken.builder()
                 .tokenNumber("PK-" +
                         UUID.randomUUID()

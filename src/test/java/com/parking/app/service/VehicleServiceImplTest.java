@@ -47,4 +47,9 @@ class VehicleServiceImplTest {
         ParkingToken response =
                 vehicleService.vehicleEntry("TN38AB1234");
 
-        assertNotNull
+        assertNotNull(result);
+        verify(tokenRepository).save(any());
+
+}
+
+}

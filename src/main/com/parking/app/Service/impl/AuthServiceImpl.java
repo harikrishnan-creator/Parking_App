@@ -24,14 +24,15 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository
                 .findByUsername(request.getUsername())
                 .orElseThrow(() ->
-                        new RuntimeException("Invalid username"));
+                        new UnauthorizedException(
+                        "Invalid username or password")
 
         boolean validPassword = passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword());
 
         if (!validPassword) {
-            throw new RuntimeException("Invalid password");
+            throw new UnauthorizedException("Invalid username or password");
         }
 
         String token = jwtUtil.generateToken(

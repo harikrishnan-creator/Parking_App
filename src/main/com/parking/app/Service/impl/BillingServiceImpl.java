@@ -13,6 +13,7 @@ public class BillingServiceImpl
         implements BillingService {
 
     private final ParkingTokenRepository repository;
+    private final BillingMapper billingMapper;            
 
     @Override
     public BillingDTO getBill(
@@ -23,7 +24,7 @@ public class BillingServiceImpl
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "Parking Token not found"));
-
+/*
         return BillingDTO.builder()
                 .tokenNumber(
                         token.getTokenNumber())
@@ -33,7 +34,9 @@ public class BillingServiceImpl
                         token.getParkedMinutes())
                 .billAmount(
                         token.getBillAmount())
-                .build();
+                .build(); */
+            
+         return billingMapper.toDTO(token);   
     }
 
     @Override

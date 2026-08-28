@@ -6,6 +6,7 @@ import com.parking.app.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.parking.app.util.TokenGeneratorUtil;
+import com.parking.app.util.BillCalculatorUtil;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -94,14 +95,7 @@ public class VehicleServiceImpl implements VehicleService {
                         new ResourceNotFoundException("Parking Token not found"));
     }
 
-    private Double calculateAmount(
-            Long parkedMinutes) {
-
-        if (parkedMinutes <= 60) {
-            return 20.0;
-        }
-
-        return 20.0 +
-                ((parkedMinutes - 60) * 0.50);
-    }
+   Double amount =
+        BillCalculatorUtil.calculateBill(
+                parkedMinutes);
 }

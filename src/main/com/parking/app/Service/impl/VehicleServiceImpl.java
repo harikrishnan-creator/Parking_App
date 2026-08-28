@@ -5,6 +5,7 @@ import com.parking.app.repository.ParkingTokenRepository;
 import com.parking.app.service.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.parking.app.util.TokenGeneratorUtil;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -43,10 +44,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
         ParkingToken token = ParkingToken.builder()
-                .tokenNumber("PK-" +
-                        UUID.randomUUID()
-                                .toString()
-                                .substring(0, 8))
+                .setTokenNumber(TokenGeneratorUtil.generateToken())
                 .vehicleNumber(vehicleNumber)
                 .entryTime(LocalDateTime.now())
                 .status("PARKED")

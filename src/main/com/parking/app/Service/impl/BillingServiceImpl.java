@@ -37,14 +37,9 @@ public class BillingServiceImpl
     }
 
     @Override
-    public Double calculateBill(
-            Long parkedMinutes) {
+    public Double calculateBill(Long parkedMinutes) {
 
-        if (parkedMinutes <= 60) {
-            return 20.0;
-        }
-
-        return 20.0 +
-                ((parkedMinutes - 60) * 0.50);
-    }
+    return BillCalculatorUtil
+            .calculateBill(parkedMinutes);
+}
 }

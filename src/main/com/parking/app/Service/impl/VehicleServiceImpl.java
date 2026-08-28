@@ -16,6 +16,21 @@ import java.util.UUID;
 public class VehicleServiceImpl implements VehicleService {
 
     private final ParkingTokenRepository tokenRepository;
+    private final VehicleRepository vehicleRepository;
+    private final ModelMapper modelMapper;
+
+    @Override
+    public VehicleDTO getVehicle(Long id) {
+
+    Vehicle vehicle = vehicleRepository
+            .findById(id)
+            .orElseThrow(() ->
+                    new RuntimeException("Vehicle not found"));
+
+    return modelMapper.map(
+            vehicle,
+            VehicleDTO.class);
+}
 
     @Override
     public ParkingToken vehicleEntry(String vehicleNumber) {

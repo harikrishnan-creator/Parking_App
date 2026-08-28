@@ -10,7 +10,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = us-east-2
 }
 
 locals {
@@ -53,7 +53,7 @@ module "eks" {
 
   eks_managed_node_groups = {
     general = {
-      instance_types = ["t3.medium"]
+      instance_types = ["t3.small"]
       min_size       = 3
       max_size       = 6
       desired_size   = 3
@@ -91,7 +91,7 @@ resource "aws_db_instance" "postgres" {
   identifier             = "dr-postgres-db"
   engine                 = "postgres"
   engine_version         = "16"
-  instance_class         = "db.t3.medium"
+  instance_class         = "db.t3.small"
   allocated_storage      = 20
 
   db_name  = "appdb"

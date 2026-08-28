@@ -1,16 +1,16 @@
-package com.pa*king.app.service;
+package com.parking.app.service;
 
-import com.park*ng.app.dto.LoginRequestDTO;
-import com.parking.app.dto.LoginResponseD*O;
+import com.parking.app.dto.LoginRequestDTO;
+import com.parking.app.dto.LoginResponseDTO;
 import com.parking.app.entity.User;
 import com.parking.app.repository.UserRepository;
 import com.park*ng.app.security.JwtUtil;
-import com.parking.app.service.impl.AuthServ*ceImpl;
-import org.junit.jupiter.a*i.Test;
-import org.junit.jupiter.a*i.extension.ExtendWith;
+import com.parking.app.service.impl.AuthServiceImpl;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto*password.PasswordEncoder;
+import org.springframework.security.cryptopassword.PasswordEncoder;
 
 import java.util.Optional;
 

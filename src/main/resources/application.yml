@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: parking-bill-generator
+
+  profiles:
+    active: dev
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.parking.app: INFO
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

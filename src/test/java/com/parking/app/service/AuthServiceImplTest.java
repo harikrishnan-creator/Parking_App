@@ -4,7 +4,7 @@ import com.parking.app.dto.LoginRequestDTO;
 import com.parking.app.dto.LoginResponseDTO;
 import com.parking.app.entity.User;
 import com.parking.app.repository.UserRepository;
-import com.park*ng.app.security.JwtUtil;
+import com.parking.app.security.JwtUtil;
 import com.parking.app.service.impl.AuthServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

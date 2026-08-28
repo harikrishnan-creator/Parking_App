@@ -21,8 +21,8 @@ public class BillingServiceImpl
         ParkingToken token = repository
                 .findByTokenNumber(tokenNumber)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "Token not found"));
+                        new ResourceNotFoundException(
+                                "Parking Token not found"));
 
         return BillingDTO.builder()
                 .tokenNumber(

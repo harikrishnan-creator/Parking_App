@@ -7,4 +7,9 @@ public interface VehicleService {
     ParkingToken vehicleEntry(String vehicleNumber);
 
     ParkingToken vehicleExit(String tokenNumber);
-}
+
+    List<ParkingToken> getAllParkingRecords();
+
+    ParkingToken findByTokenNumber(String tokenNumber);
+
+    VehicleDTO

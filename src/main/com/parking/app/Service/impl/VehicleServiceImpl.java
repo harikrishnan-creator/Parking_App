@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.parking.app.util.TokenGeneratorUtil;
 import com.parking.app.util.BillCalculatorUtil;
+import com.parking.app.constants.AppConstants;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -48,7 +49,8 @@ public class VehicleServiceImpl implements VehicleService {
                 .setTokenNumber(TokenGeneratorUtil.generateToken())
                 .vehicleNumber(vehicleNumber)
                 .entryTime(LocalDateTime.now())
-                .status("PARKED")
+  //              .status("PARKED")
+                .setStatus(AppConstants.PARKED);
                 .build();
 
         return tokenRepository.save(token);
@@ -75,7 +77,8 @@ public class VehicleServiceImpl implements VehicleService {
         token.setExitTime(exitTime);
         token.setParkedMinutes(parkedMinutes);
         token.setBillAmount(amount);
-        token.setStatus("COMPLETED");
+//        token.setStatus("COMPLETED");
+        token.setStatus(AppConstants.COMPLETED);
 
         return tokenRepository.save(token);
     }

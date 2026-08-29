@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.cryptopassword.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.Optional;
 

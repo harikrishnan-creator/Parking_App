@@ -28,9 +28,9 @@ public class VehicleServiceImpl implements VehicleService {
     private final ModelMapper modelMapper;
 
     @Override
-    public VehicleDTO getVehicle(Long id) {
+    public VehicleDTO getVehicleDetails(String vehicleNumber) {
         Vehicle vehicle = vehicleRepository
-                .findById(id)
+                .findByVehicleNumber(vehicleNumber) // ✅ must exist in repository
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Vehicle not found"));
 
@@ -44,10 +44,10 @@ public class VehicleServiceImpl implements VehicleService {
         }
 
         ParkingToken token = ParkingToken.builder()
-                .tokenNumber(TokenGeneratorUtil.generateToken()) // ✅ builder style
+                .tokenNumber(TokenGeneratorUtil.generateToken())
                 .vehicleNumber(vehicleNumber)
                 .entryTime(LocalDateTime.now())
-                .status(AppConstants.PARKED) // ✅ builder style
+                .status(AppConstants.PARKED)
                 .build();
 
         return tokenRepository.save(token);
@@ -67,7 +67,7 @@ public class VehicleServiceImpl implements VehicleService {
                 exitTime
         ).toMinutes();
 
-        Double amount = BillCalculatorUtil.calculateBill(parkedMinutes); // ✅ moved inside method
+        Double amount = BillCalculatorUtil.calculateBill(parkedMinutes);
 
         token.setExitTime(exitTime);
         token.setParkedMinutes(parkedMinutes);

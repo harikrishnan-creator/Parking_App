@@ -1,18 +1,23 @@
 package com.parking.app.service.impl;
 
+import com.parking.app.dto.VehicleDTO;
 import com.parking.app.entity.ParkingToken;
+import com.parking.app.entity.Vehicle;
 import com.parking.app.repository.ParkingTokenRepository;
+import com.parking.app.repository.VehicleRepository;
 import com.parking.app.service.VehicleService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import com.parking.app.util.TokenGeneratorUtil;
 import com.parking.app.util.BillCalculatorUtil;
 import com.parking.app.constants.AppConstants;
+import com.parking.app.exception.ResourceNotFoundException;
+import com.parking.app.exception.ValidationException;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,33 +29,25 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleDTO getVehicle(Long id) {
+        Vehicle vehicle = vehicleRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Vehicle not found"));
 
-    Vehicle vehicle = vehicleRepository
-            .findById(id)
-            .orElseThrow(() ->
-                    new RuntimeException("Vehicle not found"));
-
-    return modelMapper.map(
-            vehicle,
-            VehicleDTO.class);
-}
+        return modelMapper.map(vehicle, VehicleDTO.class);
+    }
 
     @Override
     public ParkingToken vehicleEntry(String vehicleNumber) {
-
-        if(vehicleNumber == null ||
-       vehicleNumber.isBlank()) {
-
-        throw new ValidationException(
-                "Vehicle number is mandatory");
-    }
+        if (vehicleNumber == null || vehicleNumber.isBlank()) {
+            throw new ValidationException("Vehicle number is mandatory");
+        }
 
         ParkingToken token = ParkingToken.builder()
-                .setTokenNumber(TokenGeneratorUtil.generateToken())
+                .tokenNumber(TokenGeneratorUtil.generateToken()) // ✅ builder style
                 .vehicleNumber(vehicleNumber)
                 .entryTime(LocalDateTime.now())
-  //              .status("PARKED")
-                .setStatus(AppConstants.PARKED);
+                .status(AppConstants.PARKED) // ✅ builder style
                 .build();
 
         return tokenRepository.save(token);
@@ -58,26 +55,23 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public ParkingToken vehicleExit(String tokenNumber) {
-
         ParkingToken token = tokenRepository
                 .findByTokenNumber(tokenNumber)
                 .orElseThrow(() ->
-                        new RuntimeException("Token not found"));
+                        new ResourceNotFoundException("Token not found"));
 
         LocalDateTime exitTime = LocalDateTime.now();
 
         long parkedMinutes = Duration.between(
                 token.getEntryTime(),
-                exitTime)
-                .toMinutes();
+                exitTime
+        ).toMinutes();
 
-        Double amount = calculateAmount(
-                parkedMinutes);
+        Double amount = BillCalculatorUtil.calculateBill(parkedMinutes); // ✅ moved inside method
 
         token.setExitTime(exitTime);
         token.setParkedMinutes(parkedMinutes);
         token.setBillAmount(amount);
-//        token.setStatus("COMPLETED");
         token.setStatus(AppConstants.COMPLETED);
 
         return tokenRepository.save(token);
@@ -89,16 +83,10 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public ParkingToken findByTokenNumber(
-            String tokenNumber) {
-
+    public ParkingToken findByTokenNumber(String tokenNumber) {
         return tokenRepository
                 .findByTokenNumber(tokenNumber)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Parking Token not found"));
     }
-
-   Double amount =
-        BillCalculatorUtil.calculateBill(
-                parkedMinutes);
 }

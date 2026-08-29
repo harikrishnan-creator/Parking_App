@@ -5,6 +5,7 @@ import com.parking.app.entity.ParkingToken;
 import org.springframework.stereotype.Component;
 
 @Component
+@Mapper(componentModel = "spring")
 public class BillingMapper {
 
     public BillingDTO toDTO(ParkingToken token) {

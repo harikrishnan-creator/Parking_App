@@ -9,6 +9,7 @@ public class VehicleExitRequestDTO {
     @NotBlank(message = "Token number is required")
     private String Token;
 
-    private String Vehicle;
+    @NotBlank(message = "Vehicle type is required")
+    private String vehicleType;
 
 }

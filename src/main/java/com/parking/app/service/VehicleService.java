@@ -12,4 +12,6 @@ public interface VehicleService {
 
     ParkingToken findByTokenNumber(String tokenNumber);
 
-    VehicleDTO
+    VehicleDTO getVehicleDetails(String vehicleNumber); 
+
+}

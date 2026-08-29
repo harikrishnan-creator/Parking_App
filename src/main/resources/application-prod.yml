@@ -1,28 +1,29 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://dr-postgres-db.c36sq60wwxgg.us-east-2.rds.amazonaws.com:5432/appdb
-    username: postgres
-    password: ChangeMe123!
+# ===============================
+# PostgreSQL Database Connection
+# ===============================
+spring.datasource.url=jdbc:postgresql://18.227.117.104:5432/appdb
+spring.datasource.username=postgres
+spring.datasource.password=secret
 
-  jpa:
-    hibernate:
-      ddl-auto: update
+# ===============================
+# JPA / Hibernate Settings
+# ===============================
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=false
 
-    show-sql: false
+# ===============================
+# JWT Settings
+# ===============================
+jwt.secret=${JWT_SECRET}
+jwt.expiration=86400000
 
-    properties:
-      hibernate:
-        format_sql: false
+# ===============================
+# Server Settings
+# ===============================
+server.forward-headers-strategy=framework
 
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: 86400000
-
-server:
-  forward-headers-strategy: framework
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics
+# ===============================
+# Actuator Management Endpoints
+# ===============================
+management.endpoints.web.exposure.include=health,info,metrics

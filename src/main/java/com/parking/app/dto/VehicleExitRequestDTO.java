@@ -7,4 +7,8 @@ import lombok.Data;
 public class VehicleExitRequestDTO {
 
     @NotBlank(message = "Token number is required")
-    private 
+    private String Token;
+
+    private String Vehicle;
+
+}

@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+// If you have a custom UnauthorizedException, import it here
+// import com.parking.app.exception.UnauthorizedException;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -24,8 +27,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository
                 .findByUsername(request.getUsername())
                 .orElseThrow(() ->
-                        new UnauthorizedException(
-                        "Invalid username or password")
+                        new UnauthorizedException("Invalid username or password")); // ✅ fixed
 
         boolean validPassword = passwordEncoder.matches(
                 request.getPassword(),
@@ -35,8 +37,7 @@ public class AuthServiceImpl implements AuthService {
             throw new UnauthorizedException("Invalid username or password");
         }
 
-        String token = jwtUtil.generateToken(
-                user.getUsername());
+        String token = jwtUtil.generateToken(user.getUsername());
 
         return LoginResponseDTO.builder()
                 .username(user.getUsername())

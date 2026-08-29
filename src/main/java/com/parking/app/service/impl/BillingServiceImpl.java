@@ -4,46 +4,31 @@ import com.parking.app.dto.BillingDTO;
 import com.parking.app.entity.ParkingToken;
 import com.parking.app.repository.ParkingTokenRepository;
 import com.parking.app.service.BillingService;
+import com.parking.app.exception.ResourceNotFoundException;
+import com.parking.app.util.BillCalculatorUtil;
+import com.parking.app.mapper.BillingMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.parking.app.mapper.BillingMapper;
 
 @Service
 @RequiredArgsConstructor
-public class BillingServiceImpl
-        implements BillingService {
+public class BillingServiceImpl implements BillingService {
 
     private final ParkingTokenRepository repository;
-    private final BillingMapper billingMapper;            
+    private final BillingMapper billingMapper;
 
     @Override
-    public BillingDTO getBill(
-            String tokenNumber) {
-
+    public BillingDTO getBill(String tokenNumber) {
         ParkingToken token = repository
                 .findByTokenNumber(tokenNumber)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Parking Token not found"));
-/*
-        return BillingDTO.builder()
-                .tokenNumber(
-                        token.getTokenNumber())
-                .vehicleNumber(
-                        token.getVehicleNumber())
-                .parkedMinutes(
-                        token.getParkedMinutes())
-                .billAmount(
-                        token.getBillAmount())
-                .build(); */
-            
-         return billingMapper.toDTO(token);   
+                        new ResourceNotFoundException("Parking Token not found"));
+
+        return billingMapper.toDTO(token);
     }
 
     @Override
     public Double calculateBill(Long parkedMinutes) {
-
-    return BillCalculatorUtil
-            .calculateBill(parkedMinutes);
-}
+        return BillCalculatorUtil.calculateBill(parkedMinutes);
+    }
 }

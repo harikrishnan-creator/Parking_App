@@ -1,6 +1,8 @@
 package com.parking.app.service;
 
 import com.parking.app.entity.ParkingToken;
+import java.util.List;
+import com.parking.app.dto.VehicleDTO;
 
 public interface VehicleService {
 

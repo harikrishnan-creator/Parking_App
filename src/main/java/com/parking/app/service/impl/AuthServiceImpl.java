@@ -9,6 +9,8 @@ import com.parking.app.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.parking.app.exception.UnauthorizedException;
+
 
 // If you have a custom UnauthorizedException, import it here
 // import com.parking.app.exception.UnauthorizedException;

@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/parkingdb
+    url: jdbc:postgresql://dr-postgres-db.c36sq60wwxgg.us-east-2.rds.amazonaws.com:5432/appdb
     username: postgres
-    password: postgres
+    password: Changeme!
 
   jpa:
     hibernate:

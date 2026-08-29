@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -32,7 +31,6 @@ class VehicleServiceImplTest {
 
     @Test
     void shouldCreateVehicleEntryToken() {
-
         ParkingToken token = ParkingToken.builder()
                 .id(1L)
                 .tokenNumber("PK-123")
@@ -44,12 +42,12 @@ class VehicleServiceImplTest {
         when(tokenRepository.save(any()))
                 .thenReturn(token);
 
-        ParkingToken response =
-                vehicleService.vehicleEntry("TN38AB1234");
+        ParkingToken response = vehicleService.vehicleEntry("TN38AB1234");
 
-        assertNotNull(result);
+        assertNotNull(response); // ✅ fixed variable name
+        assertEquals("TN38AB1234", response.getVehicleNumber());
+        assertEquals("PARKED", response.getStatus());
+
         verify(tokenRepository).save(any());
-
-}
-
+    }
 }

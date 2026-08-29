@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 class BillingServiceImplTest {
 
     @InjectMocks
@@ -27,10 +28,19 @@ class BillingServiceImplTest {
     @Mock
     private ParkingTokenRepository repository;
 
+    @Mock
+    private BillingMapper billingMapper;   // <-- add this
+
     @Test
     void shouldReturnBillingDetails() {
-
         ParkingToken token = ParkingToken.builder()
+                .tokenNumber("PK-111")
+                .vehicleNumber("TN38AB1234")
+                .parkedMinutes(120L)
+                .billAmount(50.0)
+                .build();
+
+        BillingDTO dto = BillingDTO.builder()
                 .tokenNumber("PK-111")
                 .vehicleNumber("TN38AB1234")
                 .parkedMinutes(120L)
@@ -40,22 +50,17 @@ class BillingServiceImplTest {
         when(repository.findByTokenNumber("PK-111"))
                 .thenReturn(Optional.of(token));
 
-        BillingDTO dto =
-                billingService.getBill("PK-111");
+        when(billingMapper.toDTO(token)).thenReturn(dto);  // <-- stub mapper
 
-        assertNotNull(dto);
+        BillingDTO result = billingService.getBill("PK-111");
 
-        assertEquals(
-                "PK-111",
-                dto.getTokenNumber());
+        assertNotNull(result);
+        assertEquals("PK-111", result.getTokenNumber());
     }
 
     @Test
     void shouldCalculateBill() {
-
-        Double amount =
-                billingService.calculateBill(120L);
-
+        Double amount = billingService.calculateBill(120L);
         assertEquals(50.0, amount);
     }
 }

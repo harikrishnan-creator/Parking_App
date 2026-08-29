@@ -1,18 +1,21 @@
-spring:
-  application:
-    name: parking-bill-generator
+# ===============================
+# Application Info
+# ===============================
+spring.application.name=parking-bill-generator
+spring.profiles.active=dev
 
-  profiles:
-    active: dev
+# ===============================
+# Server Settings
+# ===============================
+server.port=8080
 
-server:
-  port: 8080
+# ===============================
+# Logging
+# ===============================
+logging.level.root=INFO
+logging.level.com.parking.app=INFO
 
-logging:
-  level:
-    root: INFO
-    com.parking.app: INFO
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
+# ===============================
+# Swagger / SpringDoc
+# ===============================
+springdoc.swagger-ui.path=/swagger-ui.html

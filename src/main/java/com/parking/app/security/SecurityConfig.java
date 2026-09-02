@@ -62,9 +62,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth -> auth
 
-//                                .requestMatchers("/api/auth/**","/swagger-ui/**","/v3/api-docs/**")
-                                 .requestMatchers(SecurityConstants.AUTH_API)       
-                                        
+                                .requestMatchers(SecurityConstants.AUTH_API)
+                                .permitAll()
+
+                                .requestMatchers("/api/reservations/**")
                                 .permitAll()
 
                                 .requestMatchers(

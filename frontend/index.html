@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Parking App — Accessible Frontend</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <h1>Parking App</h1>
+    <p class="lead">Find and reserve parking — accessible and responsive interface</p>
+  </header>
+
+  <main id="main" class="container">
+    <section aria-labelledby="search-heading" class="panel">
+      <h2 id="search-heading">Find & Reserve Parking</h2>
+
+      <form id="parking-form" aria-describedby="form-help">
+        <p id="form-help" class="help">Use the form to add a reservation. All fields are keyboard accessible. Live updates appear in the list below.</p>
+
+        <div class="form-row">
+          <label for="name">Full name</label>
+          <input id="name" name="name" type="text" required autocomplete="name">
+        </div>
+
+        <div class="form-row">
+          <label for="vehicle">Vehicle (make/model)</label>
+          <input id="vehicle" name="vehicle" type="text" required>
+        </div>
+
+        <div class="form-row">
+          <label for="location">Location</label>
+          <select id="location" name="location" required>
+            <option value="">Choose a location</option>
+            <option value="Lot A">Lot A — Near Main Entrance</option>
+            <option value="Lot B">Lot B — North Wing</option>
+            <option value="Lot C">Lot C — Underground</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="duration">Duration (hours)</label>
+          <input id="duration" name="duration" type="number" min="1" max="72" value="1" required>
+        </div>
+
+        <div class="form-actions">
+          <button id="reserve-btn" type="submit">Reserve spot</button>
+          <button id="clear-btn" type="button">Clear reservations</button>
+        </div>
+      </form>
+
+      <div class="status">
+        <p role="status" aria-live="polite" id="announce">No reservations yet.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="list-heading" class="panel">
+      <h2 id="list-heading">Current Reservations</h2>
+
+      <div class="table-wrap">
+        <table id="reservations" class="accessible-table">
+          <caption class="sr-only">List of current parking reservations</caption>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Vehicle</th>
+              <th scope="col">Location</th>
+              <th scope="col">Hours</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- entries inserted here -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Parking App — accessible frontend demo. Open-source.</p>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

@@ -2,15 +2,15 @@ package com.parking.app.service;
 
 import com.parking.app.dto.BillingDTO;
 import com.parking.app.entity.ParkingToken;
+import com.parking.app.mapper.BillingMapper;
 import com.parking.app.repository.ParkingTokenRepository;
 import com.parking.app.service.impl.BillingServiceImpl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
@@ -21,14 +21,19 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class BillingServiceImplTest {
 
-    @InjectMocks
     private BillingServiceImpl billingService;
 
     @Mock
     private ParkingTokenRepository repository;
 
     @Mock
-    private BillingMapper billingMapper;   // <-- add this
+    private BillingMapper billingMapper;
+
+    @BeforeEach
+    void setUp() {
+        // explicitly construct with mocked dependencies to ensure mapper is injected
+        billingService = new BillingServiceImpl(repository, billingMapper);
+    }
 
     @Test
     void shouldReturnBillingDetails() {
@@ -49,7 +54,7 @@ class BillingServiceImplTest {
         when(repository.findByTokenNumber("PK-111"))
                 .thenReturn(Optional.of(token));
 
-        when(billingMapper.toDTO(token)).thenReturn(dto);  // <-- stub mapper
+        when(billingMapper.toDTO(token)).thenReturn(dto);
 
         BillingDTO result = billingService.getBill("PK-111");
 

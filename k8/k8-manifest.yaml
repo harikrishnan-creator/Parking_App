@@ -1,0 +1,129 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: parking-app
+---
+# Secret for DB credentials - replace values or create via kubectl create secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: parking-db-secret
+  namespace: parking-app
+type: Opaque
+stringData:
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://<POSTGRES_HOST>:5432/parkingdb"
+  SPRING_DATASOURCE_USERNAME: "parking_user"
+  SPRING_DATASOURCE_PASSWORD: "parking_pass"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: parking-app-config
+  namespace: parking-app
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+  # override any additional application properties here if needed
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parking-app
+  namespace: parking-app
+  labels:
+    app: parking-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: parking-app
+  template:
+    metadata:
+      labels:
+        app: parking-app
+    spec:
+      containers:
+        - name: parking-app
+          image: ghcr.io/${GITHUB_OWNER:-your-org-or-user}/parking-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: parking-db-secret
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: parking-db-secret
+                  key: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: parking-db-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: parking-app-config
+                  key: SPRING_PROFILES_ACTIVE
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: parking-app-svc
+  namespace: parking-app
+spec:
+  selector:
+    app: parking-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+# Ingress (example). Replace host and tls secret name as appropriate.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: parking-app-ingress
+  namespace: parking-app
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+    - hosts:
+        - parking.example.com
+      secretName: parking-app-tls
+  rules:
+    - host: parking.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: parking-app-svc
+                port:
+                  number: 80

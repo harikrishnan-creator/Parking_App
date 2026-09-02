@@ -1,0 +1,33 @@
+name: Deploy to Kubernetes
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image tag (full image or tag) e.g. ghcr.io/owner/parking-app:latest'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configure Kubeconfig
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        run: |
+          echo "$KUBE_CONFIG" | base64 --decode > $HOME/.kube/config
+
+      - name: Replace image in manifest and apply
+        env:
+          IMAGE: ${{ github.event.inputs.image_tag }}
+        run: |
+          # update manifest image and apply
+          sed -i "s|ghcr.io/${GITHUB_OWNER:-your-org-or-user}/parking-app:latest|${IMAGE}|g" k8/parking-app-manifest.yaml || true
+          kubectl apply -f k8/parking-app-manifest.yaml
